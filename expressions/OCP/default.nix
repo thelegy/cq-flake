@@ -1,10 +1,10 @@
 { lib
   , stdenv
-  , src
   , buildPythonPackage
   , pythonOlder
   , cmake
   , ninja
+  , fetchFromGitHub
   , glibc
   , opencascade-occt
   , llvmPackages
@@ -23,10 +23,17 @@ let
   # We need to use an unmodified version number for the dist-utils version so
   # that the version check in cadquery works
   # remember to change version number in dump_symbols.py as well
-  base-version = "7.6.3";
-  version = "v${base-version}-git-${src.shortRev}";
+  version = "7.7.0a0";
 
   vtk_main_version = lib.versions.majorMinor vtk_9.version;
+
+  src = fetchFromGitHub {
+    owner = "CadQuery";
+    repo = "ocp";
+    #rev = "${version}";
+    rev = "fcbeb80b721205e37ca7dda28d804e8595a740a4";
+    hash = "sha256-gW/kwwevdVk1JXDKmW8oVlLJd26pZbKrazrdiXgK4ZY=";
+  };
 
   ocp-dump-symbols = stdenv.mkDerivation rec {
     pname = "ocp-dump-symbols";
@@ -231,7 +238,7 @@ in buildPythonPackage {
   inherit version;
   src = ocp-result;
 
-  SETUPTOOLS_SCM_PRETEND_VERSION="${base-version}";
+  SETUPTOOLS_SCM_PRETEND_VERSION="${version}";
 
   prePatch = ''
     cp ${setuppy} ./setup.py

@@ -32,6 +32,8 @@ prev:
     installFlags = ["prefix=\${out} scotch ptscotch esmumps ptesmumps" ];
   } );
 
+  tbb = final.callPackage ./tbb.nix {};
+
   mumps = final.callPackage ./mumps.nix {
     inherit (final) scotch;
   };

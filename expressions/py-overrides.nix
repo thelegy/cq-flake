@@ -51,7 +51,6 @@
   pytest-flakefinder = final.callPackage ./pytest-flakefinder.nix { };
 
   ocp = final.callPackage ./OCP {
-    src = ocp-src;
     inherit (gccSet) stdenv llvmPackages;
     opencascade-occt = occt;
   };
