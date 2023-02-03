@@ -85,12 +85,11 @@
             packageOverrides = py-overrides;
             self = python;
           };
-          cq-kit = python.pkgs.callPackage ./expressions/cq-kit {};
         in rec {
           packages = {
             inherit mumps;
             cq-editor = pkgs.libsForQt5.callPackage ./expressions/cq-editor.nix {
-              python3Packages = python.pkgs // { inherit cq-kit; };
+              python3Packages = python.pkgs;
               src = inputs.cq-editor-src;
             };
             cq-docs = python.pkgs.callPackage ./expressions/cq-docs.nix {
