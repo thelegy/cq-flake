@@ -51,6 +51,9 @@
           };
         in rec {
           packages = {
+            cadquery-env-minimal = pkgs.pythonCQ.withPackages (
+              ps: with ps; [ cadquery cq-kit ocp-stubs pybind11-stubgen ]
+            );
             cadquery-env = pkgs.pythonCQ.withPackages (
               ps: with ps; [ cadquery cq-kit black mypy ocp-stubs pytest pytest-xdist pytest-cov pytest-flakefinder pybind11-stubgen ]
             );
