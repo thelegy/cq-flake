@@ -5,15 +5,11 @@
     nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
     flake-utils.url = "github:numtide/flake-utils";
     cadquery-src = {
-      url = "github:CadQuery/cadquery/23560289f1b76c25e2f06a0bbc9c17ebfebd5824";
+      url = "github:CadQuery/cadquery/2.2.0";
       flake = false;
     };
     cq-editor-src = {
       url = "github:CadQuery/CQ-editor/adf11592c96c2d8490e1e8d332d1a9bb63f5c112";
-      flake = false;
-    };
-    ocp-src = {
-      url = "github:cadquery/ocp";
       flake = false;
     };
     ocp-stubs-src = {
@@ -51,6 +47,9 @@
           };
         in rec {
           packages = {
+            cadquery-env-minimal = pkgs.pythonCQ.withPackages (
+              ps: with ps; [ cadquery cq-kit ocp-stubs pybind11-stubgen ]
+            );
             cadquery-env = pkgs.pythonCQ.withPackages (
               ps: with ps; [ cadquery cq-kit black mypy ocp-stubs pytest pytest-xdist pytest-cov pytest-flakefinder pybind11-stubgen ]
             );
