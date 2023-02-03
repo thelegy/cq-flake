@@ -51,12 +51,20 @@
           };
         in rec {
           packages = {
-            cadquery-env-minimal = pkgs.pythonCQ.withPackages (
-              ps: with ps; [ cadquery cq-kit ocp-stubs pybind11-stubgen ]
-            );
-            cadquery-env = pkgs.pythonCQ.withPackages (
-              ps: with ps; [ cadquery cq-kit black mypy ocp-stubs pytest pytest-xdist pytest-cov pytest-flakefinder pybind11-stubgen ]
-            );
+            cadquery-env = let
+              pythonBundle = pkgs.pythonCQ.withPackages (p: with p; [
+                cadquery
+                cq-kit
+                ocp-stubs
+                #pybind11-stubgen
+              ]);
+            in pkgs.buildEnv {
+              name = "cadquery-env";
+              paths = [ pkgs.cq-editor pythonBundle ];
+            };
+            #cadquery-env = pkgs.pythonCQ.withPackages (
+            #  ps: with ps; [ cadquery cq-kit black mypy ocp-stubs pytest pytest-xdist pytest-cov pytest-flakefinder pybind11-stubgen ]
+            #);
             just-ocp = pkgs.pythonCQ.withPackages ( ps: with ps; [ ocp ] );
             # cadquery-dev-shell = packages.python38.withPackages (
             #   ps: with ps; ([ black mypy ocp-stubs ]
@@ -69,10 +77,13 @@
             inherit (pkgs) cq-editor cq-docs mumps opencascade-occt;
             python = pkgs.pythonCQ;
 
-            default = packages.cq-editor;
+            default = packages.cadquery-env;
           };
 
-          apps.default = flake-utils.lib.mkApp { drv = packages.default; };
+          apps.default = flake-utils.lib.mkApp {
+            drv = packages.default;
+            exePath = "/bin/cq-editor";
+          };
           # TODO: add dev env for cadquery
           # devShell = packages.cadquery-dev-shell;
           # TODO: add dev env for cq-editor, with hopefully working pyqt5
