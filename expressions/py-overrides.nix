@@ -11,90 +11,90 @@
   , nlopt_nonpython
   , casadi_nonpython
   , pybind11-stubgen-src
-}: self: super: rec {
-  clang = self.callPackage ./clang.nix {
+}: final: prev: rec {
+  clang = final.callPackage ./clang.nix {
     src = llvm-src;
     llvmPackages = gccSet.llvmPackages;
   };
 
-  cymbal = self.callPackage ./cymbal.nix { };
+  cymbal = final.callPackage ./cymbal.nix { };
 
-  casadi = self.toPythonModule casadi_nonpython;
+  casadi = final.toPythonModule casadi_nonpython;
 
-  dictdiffer = self.callPackage ./dictdiffer.nix { };
+  dictdiffer = final.callPackage ./dictdiffer.nix { };
 
-  geomdl = self.callPackage ./geomdl.nix { };
+  geomdl = final.callPackage ./geomdl.nix { };
 
-  ezdxf = self.callPackage ./ezdxf.nix { };
+  ezdxf = final.callPackage ./ezdxf.nix { };
 
-  sphinx = self.callPackage ./sphinx.nix { };
+  sphinx = final.callPackage ./sphinx.nix { };
 
-  nptyping = self.callPackage ./nptyping { };
+  nptyping = final.callPackage ./nptyping { };
 
-  typish = self.callPackage ./typish.nix { };
+  typish = final.callPackage ./typish.nix { };
 
-  sphinx-autodoc-typehints = self.callPackage ./sphinx-autodoc-typehints.nix { };
+  sphinx-autodoc-typehints = final.callPackage ./sphinx-autodoc-typehints.nix { };
 
-  sphobjinv = self.callPackage ./sphobjinv.nix { };
+  sphobjinv = final.callPackage ./sphobjinv.nix { };
 
-  stdio-mgr = self.callPackage ./stdio-mgr.nix { };
+  stdio-mgr = final.callPackage ./stdio-mgr.nix { };
 
-  sphinx-issues = self.callPackage ./sphinx-issues.nix { };
+  sphinx-issues = final.callPackage ./sphinx-issues.nix { };
 
-  sphinxcadquery = self.callPackage ./sphinxcadquery.nix { };
+  sphinxcadquery = final.callPackage ./sphinxcadquery.nix { };
 
-  pywrap = self.callPackage ./pywrap {
+  pywrap = final.callPackage ./pywrap {
     src = pywrap-src;
     inherit (gccSet) llvmPackages;
   };
 
-  pytest-flakefinder = self.callPackage ./pytest-flakefinder.nix { };
+  pytest-flakefinder = final.callPackage ./pytest-flakefinder.nix { };
 
-  ocp = self.callPackage ./OCP {
+  ocp = final.callPackage ./OCP {
     src = ocp-src;
     inherit (gccSet) stdenv llvmPackages;
     opencascade-occt = occt;
   };
 
-  ocp-stubs = self.callPackage ./OCP/stubs.nix {
+  ocp-stubs = final.callPackage ./OCP/stubs.nix {
     src = ocp-stubs-src;
   };
 
-  cadquery = self.callPackage ./cadquery.nix {
+  cadquery = final.callPackage ./cadquery.nix {
     src = cadquery-src;
   };
 
-  cadquery_w_docs = self.callPackage ./cadquery.nix {
+  cadquery_w_docs = final.callPackage ./cadquery.nix {
     documentation = true;
     src = cadquery-src;
   };
 
-  vtk_9 = self.toPythonModule vtk_9_nonpython;
+  vtk_9 = final.toPythonModule vtk_9_nonpython;
 
-  nlopt = self.toPythonModule nlopt_nonpython;
+  nlopt = final.toPythonModule nlopt_nonpython;
 
-  pybind11-stubgen = self.callPackage ./OCP/pybind11-stubgen.nix {
+  pybind11-stubgen = final.callPackage ./OCP/pybind11-stubgen.nix {
     src = pybind11-stubgen-src;
   };
 
-  qdarkstyle = (super.qdarkstyle.overrideAttrs (oldAttrs: rec {
+  qdarkstyle = (prev.qdarkstyle.overrideAttrs (oldAttrs: rec {
     version = "3.0.2";
-    src = self.fetchPypi {
+    src = final.fetchPypi {
       inherit version;
       pname = "QDarkStyle";
       sha256 = "sha256-VdFJz19A7ilzl/GBjgkRGM77hVpKnFw4VmxHrNLYx64=";
     };
   }));
 
-  spyder = (super.spyder.overrideAttrs (oldAttrs: {
-    propagatedBuildInputs = with self; oldAttrs.propagatedBuildInputs ++ [
+  spyder = (prev.spyder.overrideAttrs (oldAttrs: {
+    propagatedBuildInputs = with final; oldAttrs.propagatedBuildInputs ++ [
       cookiecutter Rtree qstylizer jellyfish
     ];
   }));
 
-  qstylizer = self.callPackage ./qstylizer.nix { };
+  qstylizer = final.callPackage ./qstylizer.nix { };
 
-  python-language-server = super.python-language-server.overrideAttrs (oldAttrs: { 
+  python-language-server = prev.python-language-server.overrideAttrs (oldAttrs: { 
     # TODO: diagnose what's going on here and if I can replace python-language-server since:
     # https://github.com/palantir/python-language-server/pull/918#issuecomment-817361554
     meta.broken = false;
@@ -107,33 +107,33 @@
     ];
   });
 
-  multimethod = self.callPackage ./multimethod.nix { };
+  multimethod = final.callPackage ./multimethod.nix { };
 
-  numpydoc = super.numpydoc.overridePythonAttrs (oldAttrs: rec {
+  numpydoc = prev.numpydoc.overridePythonAttrs (oldAttrs: rec {
   #   # doCheck = false;
   #   # dontUsePytestCheck = true;
     version = "1.4.0";
-    src = self.fetchPypi {
+    src = final.fetchPypi {
       inherit version;
       inherit (oldAttrs) pname;
       sha256 = "sha256-lJTa8cdhL1mQX6CeZcm4qQu6yzgE2R96lOd4gx5vz6U=";
     };
   });
 
-  # joblib = super.joblib.overridePythonAttrs (oldAttrs: {
+  # joblib = prev.joblib.overridePythonAttrs (oldAttrs: {
   #   checkInputs = [];
   #   doCheck = false;
   # });
 
-  jinja2 = super.jinja2.overridePythonAttrs (oldAttrs: rec {
+  jinja2 = prev.jinja2.overridePythonAttrs (oldAttrs: rec {
     version = "3.0.3";
-    src = self.fetchPypi {
+    src = final.fetchPypi {
       inherit (oldAttrs) pname;
       inherit version;
       sha256 = "611bb273cd68f3b993fabdc4064fc858c5b47a973cb5aa7999ec1ba405c87cd7";
     };
   });
 
-  cq-kit = self.callPackage ./cq-kit {};
+  cq-kit = final.callPackage ./cq-kit {};
 
 }
