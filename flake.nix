@@ -108,10 +108,11 @@
             #   ++ cadquery.nativeBuildInputs
             # ));
             inherit python opencascade-occt;
+
+            default = packages.cq-editor;
           };
 
-          defaultPackage = packages.cq-editor;
-          apps.default = flake-utils.lib.mkApp { drv = defaultPackage; }; 
+          apps.default = flake-utils.lib.mkApp { drv = packages.default; };
           overlays = { inherit py-overrides; };
           # TODO: add dev env for cadquery
           # devShell = packages.cadquery-dev-shell;
