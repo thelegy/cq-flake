@@ -53,8 +53,11 @@ prev:
   };
 
   pythonCQ = final.python310.override {
+    self = final.__splicedPackages.pythonCQ;
     packageOverrides = final.py-overrides;
   };
+
+  pythonCQPackages = final.pythonCQ.pkgs;
 
   cq-editor = final.libsForQt5.callPackage ./cq-editor.nix {
     python3Packages = final.pythonCQ.pkgs;
