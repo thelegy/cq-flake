@@ -43,7 +43,7 @@ prev:
     python = final.pythonCQ;
   };
 
-  py-overrides = import ./py-overrides.nix {
+  py-overrides = import ./python {
     inherit (inputs) llvm-src pywrap-src ocp-src ocp-stubs-src cadquery-src pybind11-stubgen-src;
     inherit (final) gccSet fetchFromGitHub;
     vtk_9_nonpython = final.new_vtk_9;
