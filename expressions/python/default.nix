@@ -30,6 +30,8 @@
 
   cq-kit = final.callPackage ./cq-kit {};
 
+  cq_warehouse = final.callPackage ./cq-warehouse.nix {};
+
   cymbal = final.callPackage ./cymbal.nix { };
 
   dictdiffer = final.callPackage ./dictdiffer.nix { };
