@@ -93,19 +93,6 @@
 
   qstylizer = final.callPackage ./qstylizer.nix { };
 
-  python-language-server = prev.python-language-server.overrideAttrs (oldAttrs: { 
-    # TODO: diagnose what's going on here and if I can replace python-language-server since:
-    # https://github.com/palantir/python-language-server/pull/918#issuecomment-817361554
-    meta.broken = false;
-    disabledTests = oldAttrs.disabledTests ++ [
-      "test_lint_free_pylint"
-      "test_per_file_caching"
-      "test_multistatement_snippet"
-      "test_jedi_completion_with_fuzzy_enabled"
-      "test_jedi_completion"
-    ];
-  });
-
   multimethod = final.callPackage ./multimethod.nix { };
 
   numpydoc = prev.numpydoc.overridePythonAttrs (oldAttrs: rec {
