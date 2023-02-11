@@ -17,48 +17,6 @@
     llvmPackages = gccSet.llvmPackages;
   };
 
-  cymbal = final.callPackage ./cymbal.nix { };
-
-  casadi = final.toPythonModule casadi_nonpython;
-
-  dictdiffer = final.callPackage ./dictdiffer.nix { };
-
-  geomdl = final.callPackage ./geomdl.nix { };
-
-  ezdxf = final.callPackage ./ezdxf.nix { };
-
-  sphinx = final.callPackage ./sphinx.nix { };
-
-  nptyping = final.callPackage ./nptyping { };
-
-  typish = final.callPackage ./typish.nix { };
-
-  sphinx-autodoc-typehints = final.callPackage ./sphinx-autodoc-typehints.nix { };
-
-  sphobjinv = final.callPackage ./sphobjinv.nix { };
-
-  stdio-mgr = final.callPackage ./stdio-mgr.nix { };
-
-  sphinx-issues = final.callPackage ./sphinx-issues.nix { };
-
-  sphinxcadquery = final.callPackage ./sphinxcadquery.nix { };
-
-  pywrap = final.callPackage ./pywrap {
-    src = pywrap-src;
-    inherit (gccSet) llvmPackages;
-  };
-
-  pytest-flakefinder = final.callPackage ./pytest-flakefinder.nix { };
-
-  ocp = final.callPackage ./OCP {
-    inherit (gccSet) stdenv llvmPackages;
-    opencascade-occt = occt;
-  };
-
-  ocp-stubs = final.callPackage ./OCP/stubs.nix {
-    src = ocp-stubs-src;
-  };
-
   cadquery = final.callPackage ./cadquery.nix {
     src = cadquery-src;
   };
@@ -68,32 +26,37 @@
     src = cadquery-src;
   };
 
-  vtk_9 = final.toPythonModule vtk_9_nonpython;
+  casadi = final.toPythonModule casadi_nonpython;
+
+  cq-kit = final.callPackage ./cq-kit {};
+
+  cymbal = final.callPackage ./cymbal.nix { };
+
+  dictdiffer = final.callPackage ./dictdiffer.nix { };
+
+  ezdxf = final.callPackage ./ezdxf.nix { };
+
+  geomdl = final.callPackage ./geomdl.nix { };
+
+  jinja2 = prev.jinja2.overridePythonAttrs (oldAttrs: rec {
+    version = "3.0.3";
+    src = final.fetchPypi {
+      inherit (oldAttrs) pname;
+      inherit version;
+      sha256 = "611bb273cd68f3b993fabdc4064fc858c5b47a973cb5aa7999ec1ba405c87cd7";
+    };
+  });
+
+  # joblib = prev.joblib.overridePythonAttrs (oldAttrs: {
+  #   checkInputs = [];
+  #   doCheck = false;
+  # });
+
+  multimethod = final.callPackage ./multimethod.nix { };
 
   nlopt = final.toPythonModule nlopt_nonpython;
 
-  pybind11-stubgen = final.callPackage ./OCP/pybind11-stubgen.nix {
-    src = pybind11-stubgen-src;
-  };
-
-  qdarkstyle = (prev.qdarkstyle.overrideAttrs (oldAttrs: rec {
-    version = "3.0.2";
-    src = final.fetchPypi {
-      inherit version;
-      pname = "QDarkStyle";
-      sha256 = "sha256-VdFJz19A7ilzl/GBjgkRGM77hVpKnFw4VmxHrNLYx64=";
-    };
-  }));
-
-  spyder = (prev.spyder.overrideAttrs (oldAttrs: {
-    propagatedBuildInputs = with final; oldAttrs.propagatedBuildInputs ++ [
-      cookiecutter Rtree qstylizer jellyfish
-    ];
-  }));
-
-  qstylizer = final.callPackage ./qstylizer.nix { };
-
-  multimethod = final.callPackage ./multimethod.nix { };
+  nptyping = final.callPackage ./nptyping { };
 
   numpydoc = prev.numpydoc.overridePythonAttrs (oldAttrs: rec {
   #   # doCheck = false;
@@ -106,20 +69,57 @@
     };
   });
 
-  # joblib = prev.joblib.overridePythonAttrs (oldAttrs: {
-  #   checkInputs = [];
-  #   doCheck = false;
-  # });
+  ocp = final.callPackage ./OCP {
+    inherit (gccSet) stdenv llvmPackages;
+    opencascade-occt = occt;
+  };
 
-  jinja2 = prev.jinja2.overridePythonAttrs (oldAttrs: rec {
-    version = "3.0.3";
+  ocp-stubs = final.callPackage ./OCP/stubs.nix {
+    src = ocp-stubs-src;
+  };
+
+  pybind11-stubgen = final.callPackage ./OCP/pybind11-stubgen.nix {
+    src = pybind11-stubgen-src;
+  };
+
+  pytest-flakefinder = final.callPackage ./pytest-flakefinder.nix { };
+
+  pywrap = final.callPackage ./pywrap {
+    src = pywrap-src;
+    inherit (gccSet) llvmPackages;
+  };
+
+  qdarkstyle = (prev.qdarkstyle.overrideAttrs (oldAttrs: rec {
+    version = "3.0.2";
     src = final.fetchPypi {
-      inherit (oldAttrs) pname;
       inherit version;
-      sha256 = "611bb273cd68f3b993fabdc4064fc858c5b47a973cb5aa7999ec1ba405c87cd7";
+      pname = "QDarkStyle";
+      sha256 = "sha256-VdFJz19A7ilzl/GBjgkRGM77hVpKnFw4VmxHrNLYx64=";
     };
-  });
+  }));
 
-  cq-kit = final.callPackage ./cq-kit {};
+  qstylizer = final.callPackage ./qstylizer.nix { };
+
+  sphinx = final.callPackage ./sphinx.nix { };
+
+  sphinx-autodoc-typehints = final.callPackage ./sphinx-autodoc-typehints.nix { };
+
+  sphinx-issues = final.callPackage ./sphinx-issues.nix { };
+
+  sphinxcadquery = final.callPackage ./sphinxcadquery.nix { };
+
+  sphobjinv = final.callPackage ./sphobjinv.nix { };
+
+  spyder = (prev.spyder.overrideAttrs (oldAttrs: {
+    propagatedBuildInputs = with final; oldAttrs.propagatedBuildInputs ++ [
+      cookiecutter Rtree qstylizer jellyfish
+    ];
+  }));
+
+  stdio-mgr = final.callPackage ./stdio-mgr.nix { };
+
+  typish = final.callPackage ./typish.nix { };
+
+  vtk_9 = final.toPythonModule vtk_9_nonpython;
 
 }
