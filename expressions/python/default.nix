@@ -28,6 +28,8 @@
 
   casadi = final.toPythonModule casadi_nonpython;
 
+  cq-apply-to-each-face = final.callPackage ./cq-apply-to-each-face.nix {};
+
   cq-kit = final.callPackage ./cq-kit {};
 
   cq_warehouse = final.callPackage ./cq-warehouse.nix {};

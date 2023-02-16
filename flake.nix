@@ -50,6 +50,7 @@
             cadquery-env = let
               pythonBundle = pkgs.pythonCQ.withPackages (p: with p; [
                 cadquery
+                cq-apply-to-each-face
                 cq-kit
                 cq_warehouse
                 ocp-stubs
